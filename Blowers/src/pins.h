@@ -1,9 +1,9 @@
 #define pot A0
-#define btnIn 1
-#define btnLight 2
-#define dataPin 3
-#define motorPin 4
-#define motorEn 5
+#define btnIn 7
+#define btnLight 10
+#define dataPin 4
+#define motorPin 11
+#define motorEn 12
 
 #define small
 
@@ -20,11 +20,11 @@ void setPins()
     pinMode(btnLight,OUTPUT);
     pinMode(motorPin, OUTPUT);
     pinMode(motorEn, OUTPUT);
-
+    pinMode(13,OUTPUT);
     //set output pins low/off
     digitalWrite(btnLight, LOW);
     digitalWrite(motorPin, LOW);
-    digitalWrite(motorEn,LOW);
+    digitalWrite(motorEn,HIGH);
 
 
 }

@@ -4,6 +4,7 @@
 #include <FastLED.h>
 #include "pins.h"
 #include "light.h"
+#include "motor.h"
 
 #ifdef small
   CRGB ring[24];
@@ -16,9 +17,14 @@
 
 void setup() 
 {
-FastLED.addLeds<NEOPIXEL, dataPin>(ring, ledNum);
+  Serial.begin(9600);
+  FastLED.addLeds<NEOPIXEL, dataPin>(ring, ledNum);
+  setPins();
+  digitalWrite(13,HIGH);
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
+void loop() 
+{
+  rampMotor();
+  //digitalWrite(motorPin,HIGH);
 }
