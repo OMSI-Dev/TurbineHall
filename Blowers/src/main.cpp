@@ -33,23 +33,12 @@ void loop()
     if(p>5){p=0;}
   }
 
-  switch (p)
-  {
-  case 0:
-  analogWrite(motorPin,0);
-    break;
-    case 1:
-    analogWrite(motorPin,16);
-    break;
-    case 2:
-    analogWrite(motorPin,30);
-    break;
-    case 3:
-    analogWrite(motorPin,60);
-    break;
-    case 4:
-    analogWrite(motorPin,90);
-    break;
-  }
+  uint16_t tempRead = analogRead(pot);
+  uint16_t tempSpeed = map(tempRead,0,1024,60, 240);
   
+  Serial.print("Speed:");
+  Serial.println(tempSpeed);
+
+  analogWrite(motorPin,tempSpeed);
+
 }
