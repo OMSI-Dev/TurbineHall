@@ -5,16 +5,24 @@
 #define motorPin 11
 #define motorEn 12
 
-#define small
+//Comment out what ring is being used.
+#define large
+//#define small
+
+//Comment out what strip is being used
+//#define strip
+#define ring
+
 
 Bounce2::Button startBtn = Bounce2::Button();
-
+Pulse btnPWM;
 
 void setPins()
 {
     startBtn.attach(btnIn,INPUT_PULLUP);
     startBtn.setPressedState(LOW);
     startBtn.interval(5);
+    btnPWM.attach(btnLight);
 
     pinMode(pot, INPUT);
     pinMode(btnLight,OUTPUT);

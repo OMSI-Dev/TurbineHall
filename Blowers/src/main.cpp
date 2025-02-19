@@ -2,43 +2,30 @@
 #include <Timer.h>
 #include <Bounce2.h>
 #include <FastLED.h>
+#include <Adafruit_NeoPixel.h>
+#include <Pulse.h>
 #include "pins.h"
 #include "light.h"
 #include "motor.h"
 
-#ifdef small
-  CRGB ring[24];
-  #define ledNum 24
-#elif large
-  CRGB ring[30];
-  #define ledNum 30
-#endif
-
-
 void setup() 
 {
   Serial.begin(9600);
-  FastLED.addLeds<NEOPIXEL, dataPin>(ring, ledNum);
+  //set to RGB or RGBW if using strips for shake table/ this also switches libraries
+  #ifdef ring
+    FastLED.addLeds<NEOPIXEL, dataPin>(ringLight, ledNum);
+  #elif strip
+    strip.begin();
+  #endif
+
   setPins();
-  digitalWrite(13,HIGH);
+  lightOff();
+
 }
 
-uint8_t p = 0;
 void loop() 
 {
   startBtn.update();
-  if(startBtn.pressed())
-  {
-    p++;
-    if(p>5){p=0;}
-  }
-
-  uint16_t tempRead = analogRead(pot);
-  uint16_t tempSpeed = map(tempRead,0,1024,60, 240);
-  
-  Serial.print("Speed:");
-  Serial.println(tempSpeed);
-
-  analogWrite(motorPin,tempSpeed);
+  motor();
 
 }
