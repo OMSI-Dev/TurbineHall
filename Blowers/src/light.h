@@ -21,6 +21,15 @@ CRGB* quad2 = &ringLight[(ledNum/4 * 1)];
 CRGB* quad3 = &ringLight[(ledNum/4 * 2)]; 
 CRGB* quad4 = &ringLight[(ledNum/4 * 3)]; 
 
+uint16_t lightSpeedControl()
+{
+    uint16_t tempRead = analogRead(pot);
+    uint16_t tempSpeed = map(tempRead, 0,1024,100,20);
+
+    return tempSpeed;
+
+}
+
 void animationLight()
 {
     if(!ringTimer.running())
@@ -32,7 +41,14 @@ void animationLight()
         quad2[i] = CRGB::RoyalBlue;
         quad3[i] = CRGB::RoyalBlue;
         quad4[i] = CRGB::RoyalBlue;
+
+        #if !defined(controlledSpeed)
         ringTimer.setTime(50);
+        #else
+        uint8_t speed = lightSpeedControl();
+        ringTimer.setTime(speed);
+        #endif
+
         fadeToBlackBy(ringLight,ledNum,55);
     }
     

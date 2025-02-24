@@ -3,7 +3,8 @@ bool motorOn;
 
 #define timeLength 60000
 
-void motor()
+
+void motor(uint16_t speed)
 {   
     //turn on or off the fan & lights
     if(startBtn.isPressed() && !btnDelay.running())
@@ -15,14 +16,23 @@ void motor()
 
 
     if(motorOn)
-    {
-        digitalWrite(motorEn,HIGH);
-        digitalWrite(motorPin, HIGH);
+    {   
+        #if !defined(controlledSpeed)
+            digitalWrite(motorEn,HIGH);
+            digitalWrite(motorPin, HIGH);    
+        #else
+            digitalWrite(motorEn,HIGH);
+            analogWrite(motorPin,speed);
+        #endif
+        
+
         btnPWM.update(0);
         animationLight();
+
     }
     else
     {
+        
         digitalWrite(motorEn,LOW);
         digitalWrite(motorPin, LOW);
         btnPWM.update(1);
@@ -34,3 +44,13 @@ void motor()
        motorOn = false;
     }
 } 
+
+uint16_t speedControl()
+{
+    uint16_t tempRead = analogRead(pot);
+    uint16_t tempSpeed = map(tempRead, 0,1024,65,255);
+
+    return tempSpeed;
+
+}
+

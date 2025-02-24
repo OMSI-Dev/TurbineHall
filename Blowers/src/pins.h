@@ -5,14 +5,18 @@
 #define motorPin 11
 #define motorEn 12
 
+
+
+//Comment out if strip or ring is being used
+//#define strip
+#define ring
+
 //Comment out what ring is being used.
 #define large
 //#define small
 
-//Comment out what strip is being used
-//#define strip
-#define ring
-
+//Comment out if motors just turn on
+#define controlledSpeed
 
 Bounce2::Button startBtn = Bounce2::Button();
 Pulse btnPWM;

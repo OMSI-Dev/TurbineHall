@@ -26,6 +26,7 @@ void setup()
 void loop() 
 {
   startBtn.update();
-  motor();
+  uint16_t speed = speedControl();
+  motor(speed);
 
 }
