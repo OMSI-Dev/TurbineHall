@@ -8,8 +8,8 @@
 
 
 //Comment out if strip or ring is being used
-//#define strip
-#define ring
+#define strip
+//#define ring
 
 //Comment out what ring is being used.
 #define large

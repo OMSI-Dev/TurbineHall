@@ -8,14 +8,21 @@
 #include "light.h"
 #include "motor.h"
 
+Rgbw rgbw = Rgbw(
+  kRGBWDefaultColorTemp,
+  kRGBWExactColors,      // Mode
+  W3                     // W-placement
+);
+
 void setup() 
 {
   Serial.begin(9600);
   //set to RGB or RGBW if using strips for shake table/ this also switches libraries
   #ifdef ring
     FastLED.addLeds<NEOPIXEL, dataPin>(ringLight, ledNum);
-  #elif strip
-    strip.begin();
+  #elif defined(strip)
+    //ledStrip.begin();
+    FastLED.addLeds<WS2812, dataPin, GRB>(ledStrip, ledNum).setRgbw(RgbwDefault());
   #endif
 
   setPins();

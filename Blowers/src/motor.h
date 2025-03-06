@@ -48,7 +48,7 @@ void motor(uint16_t speed)
 uint16_t speedControl()
 {
     uint16_t tempRead = analogRead(pot);
-    uint16_t tempSpeed = map(tempRead, 0,1024,65,255);
+    uint16_t tempSpeed = map(tempRead, 0,1024,0,255);
 
     return tempSpeed;
 
