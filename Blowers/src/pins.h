@@ -5,8 +5,6 @@
 #define motorPin 11
 #define motorEn 12
 
-
-
 //Comment out if strip or ring is being used
 #define strip
 //#define ring
@@ -17,6 +15,16 @@
 
 //Comment out if motors just turn on
 #define controlledSpeed
+
+//used for RGBW Emulation
+Rgbw rgbw = Rgbw(
+    kRGBWDefaultColorTemp,
+    kRGBWExactColors,      // Mode
+    W3                     // W-placement
+);
+
+typedef WS2812<dataPin, RGB> ControllerT;  // RGB mode must be RGB, no re-ordering allowed.
+static RGBWEmulatedController<ControllerT, GRB> rgbwEmu(rgbw);  // ordering goes here.
 
 Bounce2::Button startBtn = Bounce2::Button();
 Pulse btnPWM;

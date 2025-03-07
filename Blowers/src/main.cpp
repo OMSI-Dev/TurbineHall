@@ -2,17 +2,11 @@
 #include <Timer.h>
 #include <Bounce2.h>
 #include <FastLED.h>
-#include <Adafruit_NeoPixel.h>
 #include <Pulse.h>
 #include "pins.h"
 #include "light.h"
 #include "motor.h"
 
-Rgbw rgbw = Rgbw(
-  kRGBWDefaultColorTemp,
-  kRGBWExactColors,      // Mode
-  W3                     // W-placement
-);
 
 void setup() 
 {
@@ -22,7 +16,7 @@ void setup()
     FastLED.addLeds<NEOPIXEL, dataPin>(ringLight, ledNum);
   #elif defined(strip)
     //ledStrip.begin();
-    FastLED.addLeds<WS2812, dataPin, GRB>(ledStrip, ledNum).setRgbw(RgbwDefault());
+    FastLED.addLeds(&rgbwEmu, ledStrip, ledNum);
   #endif
 
   setPins();

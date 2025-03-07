@@ -9,7 +9,6 @@
   #endif
 #elif defined(strip)
   #define ledNum 26
-  //Adafruit_NeoPixel ledStrip(ledNum, dataPin, NEO_GRBW + NEO_KHZ800);
   CRGB ledStrip[ledNum];
 #endif
 
