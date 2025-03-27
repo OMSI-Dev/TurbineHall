@@ -31,7 +31,7 @@ uint16_t lightSpeedControl()
 {
     uint16_t tempRead = analogRead(pot);
     uint16_t tempSpeed = map(tempRead, 0,1024,100,20);
-
+    Serial.println(tempRead);
     return tempSpeed;
 
 }
