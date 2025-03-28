@@ -1,9 +1,9 @@
-#define pot A1
+#define pot A0
 #define startBtnIn 7
 #define startBtnLight 10
 #define stopBtnIn 5
 #define stopBtnLight 9
-#define dataPin 1 //4
+#define dataPin 4
 #define motorPin 11
 #define motorEn 12
 
