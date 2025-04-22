@@ -8,17 +8,20 @@
 #define motorEn 12
 
 //Comment out if strip or ring is being used
-//#define strip
-#define ring
+#define strip
+//#define ring
 
-//Comment out what ring is being used.
-//#define large
-#define small
+//Comment out depening on larg or small ring
+#if ring
+    //#define large
+    #define small
+#endif
 
 //Comment out if motors just turn on
 #define controlledSpeed
 
 //comment out if not using stop button
+//used to set pinMode
 #define hasStop
 
 //used for RGBW Emulation in fastLED
@@ -29,13 +32,20 @@ Rgbw rgbw = Rgbw(
     W3                     // W-placement
 );
 
-//If the WS2812 gives an error, you can ignore it is correct and will compile
-typedef WS2812<dataPin, RGB> ControllerT;  // RGB mode must be RGB, no re-ordering allowed.
-static RGBWEmulatedController<ControllerT, GRB> rgbwEmu(rgbw);  // ordering goes here.
+//If the WS2812 gives an error, you can ignore it, it is correct and will compile
+typedef WS2812<dataPin, RGB> ControllerT;  // RGB mode must be RGB, no re-ordering allowed. (per FastLED)
+static RGBWEmulatedController<ControllerT, GRB> rgbwEmu(rgbw);
 
+//Bounce objects
 Bounce2::Button startBtn = Bounce2::Button();
-Bounce2::Button stopBtn = Bounce2::Button();
-Pulse startBtnPWM,stopBtnPWM,heartBeat;
+Pulse startBtnPWM;
+#ifdef hasStop
+    Bounce2::Button stopBtn = Bounce2::Button();
+    Pulse stopBtnPWM;
+#endif
+
+//used for the LED on pin13, for trouble shooting
+Pulse heartBeat;
 
 void setPins()
 {
@@ -57,17 +67,18 @@ void setPins()
     //used to debug
     heartBeat.attach(13);
 
+    //Set all pins connected just to prevent floating
     pinMode(pot, INPUT);
     pinMode(stopBtnLight,OUTPUT);
     pinMode(startBtnLight,OUTPUT);
     pinMode(motorPin, OUTPUT);
     pinMode(motorEn, OUTPUT);
     pinMode(13,OUTPUT);
+
     //set output pins low/off
     digitalWrite(startBtnLight, LOW);
     digitalWrite(stopBtnLight, LOW);
     digitalWrite(motorPin, LOW);
     digitalWrite(motorEn,LOW);
-
 
 }

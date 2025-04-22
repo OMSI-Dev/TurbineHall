@@ -1,4 +1,11 @@
 
+
+//this sets the size of the array
+//and if it is a ring or strip
+//Small ring is around potentionmeter
+//larg ring is around blower
+//strips are in shake tables
+
 #ifdef ring
   #ifdef small
     #define ledNum 24
@@ -14,9 +21,14 @@
 
 MoToTimer ledTimer,rampTimer;
 uint8_t i =0;
+//Creates a time for the lights to ramp up to speed & a goal value
 uint16_t rampTime = 125, r = rampTime;
 
 bool rampLightSpeed = 1;
+
+//Higher the number the slower it updates
+#define lowSpeed 30
+#define highSpeed 1
 
 #ifdef ring
   //break into sections
@@ -43,17 +55,20 @@ uint16_t lightSpeedControl()
 
 uint16_t ringSpeed()
 {
+    // take a reading and then map it to the high and low of the ring speeds.
     uint16_t tempRead = analogRead(pot);
-    uint16_t tempPos = map(tempRead, 0,1024,1,25);
+    uint16_t tempPos = map(tempRead, 0,1024,lowSpeed,highSpeed);
     Serial.print("Pot: ");
     Serial.println(tempRead);
-    tempPos = constrain(tempPos,1,25);
+    //Constrain it in the values to prevent any accdental overflow
+    tempPos = constrain(tempPos,lowSpeed,highSpeed);
     Serial.print("tempPos: ");
     Serial.println(tempPos);
     return tempPos;
 
 }
 
+//if the ring is active use this animation sequence
 #ifdef ring
   void animationLight()
   {
@@ -68,9 +83,11 @@ uint16_t ringSpeed()
   }
 #endif
 
+//if the strip is active use this animation sequence
 #ifdef strip
   void animationLight()
   {
+      //if rampspeed is off, use a timer based on the pot position
       if(!rampLightSpeed)
         {
           if(!ledTimer.running())
@@ -92,8 +109,8 @@ uint16_t ringSpeed()
               fadeToBlackBy(ledStrip,ledNum,100);
           }
         }
-      if(rampLightSpeed)
-      {
+      //if rampspeed is on, update the timers pace until it reaches full speed  
+      else{
         if(!rampTimer.running())
         {
             i++;
@@ -114,7 +131,9 @@ uint16_t ringSpeed()
             
             if(r==speed)
             {
+              //Reset the ramp vars
               r=rampTime;
+              //turn off ramping
               rampLightSpeed = 0;
               Serial.println("Lights match Speed...");
               Serial.print("R = ");
@@ -130,7 +149,6 @@ uint16_t ringSpeed()
 
 void lightOff()
 {
-    //fill_solid(ringLight,ledNum,CRGB::Black);
     FastLED.clear();
     FastLED.show();
 }
