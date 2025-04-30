@@ -2,8 +2,8 @@
 
 //this sets the size of the array
 //and if it is a ring or strip
-//Small ring is around potentionmeter
-//larg ring is around blower
+//Small ring is around potentiometer
+//large ring is around blower
 //strips are in shake tables
 
 #ifdef ring
@@ -151,4 +151,18 @@ void lightOff()
 {
     FastLED.clear();
     FastLED.show();
+}
+
+void lightTest()
+{
+
+  fill_solid(ledStrip1,ledNum,CRGB::Red);
+  FastLED.show();
+  delay(1000);
+  fill_solid(ledStrip1,ledNum,CRGB::Blue);
+  FastLED.show();
+  delay(1000);
+  fill_solid(ledStrip1,ledNum,CRGB::Green);
+  FastLED.show();
+  delay(1000);
 }

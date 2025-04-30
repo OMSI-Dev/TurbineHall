@@ -20,8 +20,9 @@ void setup()
   //enable correct pins
   setPins();
   //start with lights off
+  lightTest();
   lightOff();
-
+  digitalWrite(13, HIGH);
 }
 
 void loop() 
@@ -31,7 +32,7 @@ void loop()
   #ifdef hasStop
   stopBtn.update();
   #endif
-  
+
   uint16_t speed = speedControl();
   motor(speed);
 

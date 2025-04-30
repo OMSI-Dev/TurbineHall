@@ -53,7 +53,7 @@ void motor(uint16_t speed)
         #endif
         
         //update button lights
-        updateIndicators(1);
+        updateIndicators(motorOn);
         //update light animation
         animationLight();
     }
@@ -63,7 +63,7 @@ void motor(uint16_t speed)
         digitalWrite(motorEn,LOW);
         digitalWrite(motorPin, LOW);
         //Update button lights
-        updateIndicators(0);
+        updateIndicators(motorOn);
         //Set neoPixels to off
         lightOff();
     }
