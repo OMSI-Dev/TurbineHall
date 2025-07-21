@@ -11,6 +11,7 @@
 void setup() 
 {
   Serial.begin(9600);
+
   //set to RGB or RGBW if using strips for shake table
   #ifdef ring
     FastLED.addLeds<NEOPIXEL, dataPin>(ringLight, ledNum);
@@ -22,13 +23,14 @@ void setup()
   //start with lights off
   lightTest();
   lightOff();
-  digitalWrite(13, HIGH);
+
 }
 
 void loop() 
 {
   //check buttons
   startBtn.update();
+  
   #ifdef hasStop
   stopBtn.update();
   #endif

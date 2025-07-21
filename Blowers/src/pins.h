@@ -1,3 +1,5 @@
+#include "defs.h"
+
 #define pot A0
 #define startBtnIn 7
 #define startBtnLight 10
@@ -6,23 +8,6 @@
 #define dataPin 4
 #define motorPin 11
 #define motorEn 12
-
-//Comment out if strip or ring is being used
-#define strip
-//#define ring
-
-//Comment out depening on larg or small ring
-#if ring
-    //#define large
-    #define small
-#endif
-
-//Comment out if motors just turn on
-#define controlledSpeed
-
-//comment out if not using stop button
-//used to set pinMode
-#define hasStop
 
 //used for RGBW Emulation in fastLED
 //Do not change.
@@ -76,9 +61,9 @@ void setPins()
     pinMode(13,OUTPUT);
 
     //set output pins low/off
-    digitalWrite(startBtnLight, LOW);
+    digitalWrite(startBtnLight, HIGH);
     digitalWrite(stopBtnLight, LOW);
-    digitalWrite(motorPin, LOW);
-    digitalWrite(motorEn,LOW);
+    digitalWrite(motorPin, HIGH);
+    digitalWrite(motorEn,HIGH);
 
 }

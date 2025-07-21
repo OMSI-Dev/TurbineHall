@@ -8,15 +8,22 @@ void updateIndicators(bool motorOn)
 {
     if(motorOn)
     {   
+        //Turn off start LED
         startBtnPWM.update(0);
+        #ifdef hasStop
+        //Turn on stop LED
         stopBtnPWM.update(1);
+        #endif
+        //Change rate and update heartbeat
         heartBeat.setRate(10);
         heartBeat.update(1);
     }
     else
     {
         startBtnPWM.update(1);
+        #ifdef hasStop
         stopBtnPWM.update(0);
+        #endif
         heartBeat.setRate(200);
         heartBeat.update(1);
         rampLightSpeed = 1;
@@ -25,6 +32,7 @@ void updateIndicators(bool motorOn)
 
 void motor(uint16_t speed)
 {   
+
     //Check to see if motor is already running and if it should allow start button
     if(!motorOn)
     {    
@@ -39,14 +47,15 @@ void motor(uint16_t speed)
         }
     }
 
-
-    //Check if the motor is on and if it has variable speed controll
+    //Check if the motor is on and if it has variable speed control
     //Horizontal blowers do not have variable speeds.
     if(motorOn)
     {   
         #if !defined(controlledSpeed)
-            digitalWrite(motorEn,HIGH);
-            digitalWrite(motorPin, HIGH);    
+            speed = 255;
+            //Logic of optoisolator is flipped of high/low
+            digitalWrite(motorEn,LOW);
+            digitalWrite(motorPin, LOW);    
         #else
             digitalWrite(motorEn,HIGH);
             analogWrite(motorPin,speed);
@@ -60,20 +69,29 @@ void motor(uint16_t speed)
     else
     {
         //set motor to to off
-        digitalWrite(motorEn,LOW);
-        digitalWrite(motorPin, LOW);
+        digitalWrite(motorEn,HIGH);
+        digitalWrite(motorPin, HIGH);
         //Update button lights
         updateIndicators(motorOn);
         //Set neoPixels to off
         lightOff();
     }
 
-    //have the timeout reset or if the stop button was pressed
-    if((motorOn && !timeLimit.running()) || (stopBtn.isPressed() && !btnDelay.running()))
-    {
-       motorOn = false;
-       btnDelay.setTime(1000);
-    }
+    #ifdef hasStop
+        //have the timeout reset or if the stop button was pressed
+        if((motorOn && !timeLimit.running()) || (stopBtn.isPressed() && !btnDelay.running()))
+        {
+        motorOn = false;
+        btnDelay.setTime(1000);
+        }
+    #else
+        if((motorOn && !timeLimit.running()))
+        {
+        motorOn = false;
+        btnDelay.setTime(1000);
+        }    
+    #endif
+
 } 
 
 uint16_t speedControl()
