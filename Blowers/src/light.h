@@ -73,7 +73,6 @@ uint16_t stripSpeed()
     uint16_t tempRead = analogRead(pot);
     Serial.print("Pot: ");
     Serial.println(tempRead);
-    tempRead  = 1024;
     uint16_t tempPos = map(tempRead, 0,1024,0,ledNum/2-1);
     //Constrain it in the values to prevent any accdental overflow
     tempPos = constrain(tempPos,0,ledNum/2);
