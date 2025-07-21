@@ -15,7 +15,7 @@
     CRGB ringLight[ledNum];
   #endif
 #elif defined(strip)
-  const uint8_t ledNum = 26;
+  const uint8_t ledNum = 24;
   const uint8_t halfLed = ledNum/2-1;
   CRGB ledStrip[ledNum];
 #endif
@@ -59,21 +59,32 @@ uint16_t lightSpeedControl()
 uint16_t ringSpeed()
 {
     // take a reading and then map it to the high and low of the ring speeds.
-    uint16_t tempRead = analogRead(pot);
-    uint16_t tempPos = map(tempRead, 0,1024,lowSpeed,highSpeed);
+    uint32_t avg= 0;
+    for(uint8_t avgNum = 0; avgNum < 100; avgNum++)
+    {
+      uint16_t tempRead = analogRead(pot);
+      avg += tempRead;
+    }
+
+    Serial.println(avg);
+    uint16_t AvgTempRead = avg/100;
+    Serial.print("Avg Pot:");
+    Serial.println(AvgTempRead);
+
+    uint16_t tempPos = map(AvgTempRead, 0,1024,3,24);
     //Constrain it in the values to prevent any accdental overflow
-    tempPos = constrain(tempPos,lowSpeed,highSpeed);
+    tempPos = constrain(tempPos,3,24);
     return tempPos;
 
 }
 
-uint16_t stripSpeed()
+uint16_t stripPosistion()
 {
     // take a reading and then map it to the high and low of the ring speeds.
     uint16_t tempRead = analogRead(pot);
     Serial.print("Pot: ");
     Serial.println(tempRead);
-    uint16_t tempPos = map(tempRead, 0,1024,0,ledNum/2-1);
+    uint16_t tempPos = map(tempRead, 0,1020,3,ledNum/2-1);
     //Constrain it in the values to prevent any accdental overflow
     tempPos = constrain(tempPos,0,ledNum/2);
     return tempPos;
@@ -116,18 +127,18 @@ uint16_t stripSpeed()
   void animationLight()
   {
           //this is the highest position to put the led to.
-      uint8_t ledPos = stripSpeed();
+      uint8_t ledPos = stripPosistion();
       Serial.print("Strip Value: ");
       Serial.println(ledPos);
       //Set to current position
       fill_gradient_RGB(ledStrip1,ledPos,CRGB::Green,CRGB::Red);
       for(uint8_t x=halfLed; x>=0; x--)
       { 
-        Serial.print("Strip1:");
-        Serial.print(x);
-        Serial.print(":");
-        Serial.print("Strip2:");
-        Serial.println(halfLed-x);       
+        // Serial.print("Strip1:");
+        // Serial.print(x);
+        // Serial.print(":");
+        // Serial.print("Strip2:");
+        // Serial.println(halfLed-x);       
 
         //Copy the order of strip1 in reverese and apply to strip2
         ledStrip2[x] = ledStrip1[halfLed-x];

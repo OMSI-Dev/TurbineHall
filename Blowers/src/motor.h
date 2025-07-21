@@ -1,5 +1,5 @@
-MoToTimer btnDelay, timeLimit;
-bool motorOn;
+MoToTimer btnDelay, timeLimit,fullSpeedTimer;
+bool motorOn,setFull;
 
 //Defines how long the game should run in ms
 #define timeLength 60000
@@ -57,10 +57,25 @@ void motor(uint16_t speed)
             digitalWrite(motorEn,LOW);
             digitalWrite(motorPin, LOW);    
         #else
-            digitalWrite(motorEn,HIGH);
-            analogWrite(motorPin,speed);
+            digitalWrite(motorEn,LOW);
+            //Bring the motor up to full RPMs for ~ 1/4 of a sec
+            //This should help with longevity of the motors.
+            if(setFull)
+            {
+                analogWrite(motorPin,255);
+                fullSpeedTimer.setTime(300);
+            }
+            else
+            {
+                analogWrite(motorPin,speed);
+            }
+
+            if(!fullSpeedTimer.running())
+            {
+                setFull = false;
+            }
+
         #endif
-        
         //update button lights
         updateIndicators(motorOn);
         //update light animation
@@ -68,6 +83,8 @@ void motor(uint16_t speed)
     }
     else
     {
+        //reset full speed bool
+        setFull = true;
         //set motor to to off
         digitalWrite(motorEn,HIGH);
         digitalWrite(motorPin, HIGH);
@@ -85,7 +102,7 @@ void motor(uint16_t speed)
         btnDelay.setTime(1000);
         }
     #else
-        if((motorOn && !timeLimit.running()))
+        if((motorOn && !timeLimit.running()) || (startBtn.isPressed() && !btnDelay.running()) )
         {
         motorOn = false;
         btnDelay.setTime(1000);
